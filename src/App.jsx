@@ -22,6 +22,7 @@ const App = () => {
     const [language, setLanguage] = useState('EN');
     const [store, setStore] = useState(null);
     const [register, setRegister] = useState(null);
+    const [status, setStatus] = useState(null);
     const [translations, setTranslations] = useState(null);
     const [connected, setConnected] = useState(false);
     const [showThankyou, setShowThankyou] = useState(false);
@@ -45,7 +46,9 @@ const App = () => {
             setConnected(false);
         },
         onMessage: (message) => {
-            if (message.tender) {
+            if (message.status) {
+                setStatus(message.status);
+            } else if (message.tender) {
                 setTender(message.tender ?? []);
                 if (message.tender.length === 0) {
                     setShowThankyou(true);
@@ -71,6 +74,11 @@ const App = () => {
             storeLanguage.current = store.languageCode;
         }
     }, [store])
+    useEffect(() => {
+        if (register) {
+            setStatus(register.status);
+        }
+    }, [register])
     useEffect(() => {
         api.get(setTranslations, '/ui/translations/' + language)
     }, [language])
@@ -133,10 +141,11 @@ const App = () => {
                                 translations={translations}
                             />
                         ) : ''}
-                        {translations && connected && basket.length == 0 ? (
+                        {status && translations && connected && basket.length == 0 ? (
                             <Welcome
                                 translations={translations}
                                 showThankyou={showThankyou}
+                                status={status}
                             />
                         ) : ''}
                         {translations && !connected && languages.length > 0 ? (
