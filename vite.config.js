@@ -7,7 +7,7 @@ export default defineConfig(({ command, mode }) => {
     const port = env.REACT_PORT ? env.REACT_PORT : 3002;
     return {
         plugins: [react()],
-        base: "/",
+        base: "/display/",
         preview: {
             port: port,
             strictPort: true,

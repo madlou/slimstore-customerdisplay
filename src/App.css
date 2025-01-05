@@ -1,19 +1,17 @@
-div.rainbow {
-    height: 250px;
-    width: 80vw;
-    position: absolute;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    border-radius: 5px;
-    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.3);
+div.rainbow-container {
+    height: 300px;
+    width: 50vw;
+    transform: translate(0, 0);
+    border-radius: 15px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
 
-div.rainbow:before {
-    content: "";
-    height: 800%;
-    width: 300%;
+div.rainbow-background {
+    height: 100vw;
+    width: 100vw;
+    left: -25vw;
+    top: calc(150px - 50vw);
     position: absolute;
     background: conic-gradient(#fd004c,
             #fe9000,
@@ -22,31 +20,25 @@ div.rainbow:before {
             #3363ff,
             #b102b7,
             #fd004c);
-    left: -100%;
-    top: -350%;
-    animation: spin 3s infinite linear;
+    animation: spin 5s infinite linear;
+}
+
+div.rainbow-inner {
+    position: absolute;
+    background-color: white;
+    width: calc(100% - 40px);
+    height: calc(100% - 40px);
+    margin-top: 20px;
+    margin-left: 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vw;
 }
 
 @keyframes spin {
     100% {
         transform: rotate(-360deg);
     }
-}
-
-div.rainbow:after {
-    content: "Welcome to XJT!";
-    position: absolute;
-    background-color: #ffffff;
-    height: 90%;
-    width: 97%;
-    top: 5%;
-    left: 1.5%;
-    border-radius: 5px;
-    font-family: 'Poppins', sans-serif;
-    color: #000;
-    font-size: 6vw;
-    letter-spacing: 6px;
-    display: grid;
-    place-items: center;
-
 }

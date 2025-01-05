@@ -14,8 +14,13 @@ String.prototype.toCamelCase = function () {
         .replace(/^(.)/, function ($1) { return $1.toLowerCase(); });
 }
 
+Number.prototype.pad = function (width, character = '0') {
+    const value = '' + this.valueOf();
+    return value.length >= width ? value : new Array(width - value.length + 1).join(character) + value;
+}
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-    // <React.StrictMode>
-    <App />
-    // </React.StrictMode>
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>
 );
