@@ -10,7 +10,7 @@ const Connecting = ({ translations }) => {
                 ta={'center'}
                 shadow='md'
                 p={'xl'}
-            >{translations.connectingToServer}</Paper>
+            >{translations?.connectingToServer ?? 'Connecting to backend server...'}</Paper>
         </Center>
     )
 }

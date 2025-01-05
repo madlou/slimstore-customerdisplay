@@ -11,7 +11,6 @@ import Footer from './components/Footer';
 import Header from './components/Header';
 import Welcome from './components/Welcome';
 import '@mantine/core/styles.css';
-import './App.css'
 
 const App = () => {
     const cookies = new Cookies();
@@ -48,7 +47,6 @@ const App = () => {
             if (message.tender) {
                 setTender(message.tender ?? []);
                 if (message.tender.length === 0) {
-                    console.log('triggered show thank you')
                     setShowThankyou(true);
                     setTimeout(() => {
                         setShowThankyou(false);
@@ -127,7 +125,7 @@ const App = () => {
                         display={'flex'}
                         flex={1}
                     >
-                        {translations && languages.length == 0 ? (
+                        {languages.length == 0 ? (
                             <Connecting
                                 translations={translations}
                             />

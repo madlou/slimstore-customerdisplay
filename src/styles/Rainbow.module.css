@@ -1,4 +1,4 @@
-div.rainbow-container {
+.container {
     height: 300px;
     width: 60vw;
     transform: translate(0, 0);
@@ -7,7 +7,7 @@ div.rainbow-container {
     overflow: hidden;
 }
 
-div.rainbow-background {
+.background {
     height: 100vw;
     width: 100vw;
     left: -25vw;
@@ -23,7 +23,7 @@ div.rainbow-background {
     animation: spin 5s infinite linear;
 }
 
-div.rainbow-inner {
+.inner {
     position: absolute;
     background-color: white;
     width: calc(100% - 40px);

@@ -1,5 +1,6 @@
-import { Box, Center, Text } from '@mantine/core'
 import React from 'react'
+import { Box, Center, Text } from '@mantine/core'
+import rainbow from '../styles/Rainbow.module.css'
 
 const Welcome = ({ translations, showThankyou }) => {
     const message = showThankyou ? translations.thankyou : translations.welcome;
@@ -7,12 +8,11 @@ const Welcome = ({ translations, showThankyou }) => {
         <Center
             flex={1}
         >
-            <Box className='rainbow-container'>
-                <Box className='rainbow-background'></Box>
-                <Box className='rainbow-inner'>
+            <Box className={rainbow.container}>
+                <Box className={rainbow.background}></Box>
+                <Box className={rainbow.inner}>
                     <Text
                         span fz={'5vw'}
-                        className='rainbox-text'
                         style={{
                             textWrap: 'balance',
                             textAlign: 'center',
