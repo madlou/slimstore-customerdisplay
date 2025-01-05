@@ -1,14 +1,16 @@
 import { Center, Paper } from '@mantine/core'
 import React from 'react'
 
-const Connecting = () => {
+const Connecting = ({ translations }) => {
     return (
-        <Center flex={1}>
+        <Center
+            flex={1}
+        >
             <Paper
                 ta={'center'}
                 shadow='md'
                 p={'xl'}
-            >Connecting to server...</Paper>
+            >{translations.connectingToServer}</Paper>
         </Center>
     )
 }

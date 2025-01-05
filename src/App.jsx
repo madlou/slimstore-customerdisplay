@@ -25,6 +25,7 @@ const App = () => {
     const [register, setRegister] = useState(null);
     const [translations, setTranslations] = useState(null);
     const [connected, setConnected] = useState(false);
+    const [showThankyou, setShowThankyou] = useState(false);
     const logger = createLogger({
         level: import.meta.env.VITE_LOG_TO_CONSOLE,
     })
@@ -46,6 +47,13 @@ const App = () => {
         onMessage: (message) => {
             if (message.tender) {
                 setTender(message.tender ?? []);
+                if (message.tender.length === 0) {
+                    console.log('triggered show thank you')
+                    setShowThankyou(true);
+                    setTimeout(() => {
+                        setShowThankyou(false);
+                    }, 5000);
+                }
             } else {
                 setBasket(message.basket ?? []);
                 setTender(message.tender ?? []);
@@ -99,32 +107,45 @@ const App = () => {
                 footer={{ height: 16 * 1.5 }}
             >
                 <AppShell.Header>
-                    <Header
-                        languages={languages}
-                        language={language}
-                        setLanguage={setLanguage}
-                        store={store}
-                        translations={translations}
-                    />
+                    {language && languages && translations ? (
+                        <Header
+                            languages={languages}
+                            language={language}
+                            setLanguage={setLanguage}
+                            store={store}
+                            translations={translations}
+                        />
+                    ) : ''}
                 </AppShell.Header>
                 <AppShell.Main
                     display={'flex'}
                     bg='rgba(0, 0, 0, .04)'
                 >
-                    <Container w={'100%'} maw={800} display={'flex'} flex={1}>
-                        {languages.length == 0 ? (
-                            <Connecting />
+                    <Container
+                        w={'100%'}
+                        maw={800}
+                        display={'flex'}
+                        flex={1}
+                    >
+                        {translations && languages.length == 0 ? (
+                            <Connecting
+                                translations={translations}
+                            />
                         ) : ''}
-                        {connected && basket.length == 0 ? (
-                            <Welcome />
+                        {translations && connected && basket.length == 0 ? (
+                            <Welcome
+                                translations={translations}
+                                showThankyou={showThankyou}
+                            />
                         ) : ''}
-                        {!connected && languages.length > 0 ? (
+                        {translations && !connected && languages.length > 0 ? (
                             <Form
                                 location={location}
                                 setLocation={setLocation}
+                                translations={translations}
                             />
                         ) : ''}
-                        {basket.length > 0 ? (
+                        {translations && basket.length > 0 ? (
                             <Basket
                                 basket={basket}
                                 tender={tender}
@@ -137,11 +158,13 @@ const App = () => {
                 <AppShell.Footer
                     bg='rgba(0, 0, 0, .04)'
                 >
-                    <Footer
-                        store={store}
-                        register={register}
-                        socket={socket}
-                    />
+                    {store && register && socket ? (
+                        <Footer
+                            store={store}
+                            register={register}
+                            socket={socket}
+                        />
+                    ) : ''}
                 </AppShell.Footer>
             </AppShell >
         </MantineProvider >

@@ -2,7 +2,7 @@ import { Button, NumberInput, Paper } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import React from 'react'
 
-const Form = ({ location, setLocation }) => {
+const Form = ({ location, setLocation, translations }) => {
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: location,
@@ -20,26 +20,26 @@ const Form = ({ location, setLocation }) => {
             <form onSubmit={form.onSubmit((values) => setLocation(values))}>
                 <NumberInput
                     key={form.key('store')}
-                    label='Store Number'
+                    label={translations.store}
                     mt={16}
                     {...form.getInputProps('store')}
                 />
                 <NumberInput
                     key={form.key('register')}
-                    label='Register Number'
+                    label={translations.register}
                     mt={16}
                     {...form.getInputProps('register')}
                 />
                 <Button
                     mt={16}
                     type={'submit'}
-                >Connect</Button>
+                >{translations.update}</Button>
             </form>
             <Button
                 mt={16}
                 onClick={() => { window.location.reload() }}
                 display={location.store ? 'block' : 'none'}
-            >Cancel</Button>
+            >{translations.cancel}</Button>
         </Paper>
     )
 }
