@@ -1,5 +1,5 @@
 import Cookies from 'universal-cookie';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AppShell, Container, MantineProvider } from '@mantine/core';
 import { createApi } from './util/createApi';
 import { createLogger } from './util/createLogger';
@@ -25,6 +25,7 @@ const App = () => {
     const [translations, setTranslations] = useState(null);
     const [connected, setConnected] = useState(false);
     const [showThankyou, setShowThankyou] = useState(false);
+    const storeLanguage = useRef(null);
     const logger = createLogger({
         level: import.meta.env.VITE_LOG_TO_CONSOLE,
     })
@@ -50,6 +51,7 @@ const App = () => {
                     setShowThankyou(true);
                     setTimeout(() => {
                         setShowThankyou(false);
+                        setLanguage(storeLanguage.current);
                     }, 5000);
                 }
             } else {
@@ -66,6 +68,7 @@ const App = () => {
     useEffect(() => {
         if (store) {
             setLanguage(store.languageCode);
+            storeLanguage.current = store.languageCode;
         }
     }, [store])
     useEffect(() => {
