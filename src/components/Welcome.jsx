@@ -18,7 +18,7 @@ const Welcome = ({ translations, showThankyou, status }) => {
                         textWrap: 'balance',
                         textAlign: 'center',
                     }}
-                >Register Closed</Paper>
+                >{translations.registerClosed}</Paper>
             ) : (
                 <Box className={rainbow.container}>
                     <Box className={rainbow.background}></Box>
