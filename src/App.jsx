@@ -1,6 +1,7 @@
 import Cookies from 'universal-cookie';
 import React, { useState, useEffect, useRef } from 'react';
 import { AppShell, Container, MantineProvider } from '@mantine/core';
+import { useViewportSize } from '@mantine/hooks';
 import { createApi } from './util/createApi';
 import { createLogger } from './util/createLogger';
 import { createSocket } from './util/createSocket';
@@ -14,6 +15,7 @@ import '@mantine/core/styles.css';
 
 const App = () => {
     const cookies = new Cookies();
+    const { width, height } = useViewportSize();
     const [fontSize, setFontSize] = useState(24);
     const [basket, setBasket] = useState([]);
     const [tender, setTender] = useState([]);
@@ -99,6 +101,28 @@ const App = () => {
     useEffect(() => {
         document.documentElement.style.fontSize = fontSize + 'px';
     }, [fontSize]);
+    const breakpoint = {
+        xs: 576,
+        sm: 768,
+        md: 992,
+        lg: 1200,
+        xl: 1408,
+    }
+    useEffect(() => {
+        if (width < breakpoint.xs) {
+            setFontSize(16);
+        } else if (width < breakpoint.sm) {
+            setFontSize(18)
+        } else if (width < breakpoint.md) {
+            setFontSize(20)
+        } else if (width < breakpoint.lg) {
+            setFontSize(22)
+        } else if (width < breakpoint.xl) {
+            setFontSize(24)
+        } else {
+            setFontSize(26)
+        }
+    }, [width]);
     useEffect(() => {
         if (cookies.get('store-register')) {
             const cookieSplit = cookies.get('store-register').split('-');
@@ -131,10 +155,10 @@ const App = () => {
                     bg='rgba(0, 0, 0, .04)'
                 >
                     <Container
-                        w={'100%'}
                         maw={800}
                         display={'flex'}
                         flex={1}
+                        style={{ paddingInline: width < 992 ? 0 : 'var(--mantine-spacing-md)' }}
                     >
                         {languages.length == 0 ? (
                             <Connecting
@@ -158,6 +182,7 @@ const App = () => {
                         {translations && basket.length > 0 ? (
                             <Basket
                                 basket={basket}
+                                isMobile={width < 992}
                                 tender={tender}
                                 store={store}
                                 translations={translations}

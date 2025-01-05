@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react'
 import { Text, Box, Group, Divider, ScrollArea, Paper } from '@mantine/core';
 import moneyConverter from '../util/moneyConverter.js';
 
-function Basket({ basket, tender, store, translations }) {
+function Basket({ basket, tender, store, translations, isMobile }) {
     let total = 0;
     let lines = 0;
     let items = 0;
@@ -29,7 +29,9 @@ function Basket({ basket, tender, store, translations }) {
             });
         }
     }
-    const scrollHeight = 'calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px) - 150px)';
+    const scrollHeight = isMobile ?
+        'calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px) - 60px)' :
+        'calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px) - 150px)';
     useEffect(() => {
         setTimeout(() => {
             scrollToBottom()
@@ -39,7 +41,7 @@ function Basket({ basket, tender, store, translations }) {
         <Paper
             flex={1}
             p={32}
-            m={16}
+            m={isMobile ? 0 : 16}
             maw={800}
         >
             <ScrollArea.Autosize
