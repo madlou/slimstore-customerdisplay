@@ -105,7 +105,7 @@ function Basket({ basket, tender, store, translations, isMobile }) {
                             <Divider mb={8} size='md' variant='dotted' />
                             {tender.map((line, i) => {
                                 return <Text key={i}>
-                                    {uiTranslations[line.label.toCamelCase()]}
+                                    {translations[line.label.toCamelCase()]}
                                     &nbsp;
                                     {moneyConverter(
                                         store.countryCode,
