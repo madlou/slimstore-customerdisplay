@@ -13,27 +13,27 @@ export function createSocket({ url, onConnect, onDisconnect, onMessage, logger }
         connect: (locationObject) => {
             connectedState.current = true;
             if (stompClient?.current?.connected == true) {
-                logger.info('Socket', 'Already connnected!', true);
+                logger && logger.info('Socket', 'Already connnected!', true);
                 return false;
             }
             const client = new Client({
                 webSocketFactory: () => new SockJS(url),
                 reconnectDelay: 5000,
                 debug: (message) => {
-                    logger.debug('Socket Debug', message);
+                    logger && logger.debug('Socket Debug', message);
                 },
                 onConnect: () => {
-                    logger.info('WebSocket Connect', locationObject, true);
+                    logger && logger.info('WebSocket Connect', locationObject, true);
                     client.subscribe('/topic/connected', (response) => {
-                        logger.debug('Register Connected', JSON.parse(response.body));
+                        logger && logger.debug('Register Connected', JSON.parse(response.body));
                     });
                     client.subscribe('/topic/disconnected', (response) => {
-                        logger.debug('Register Disconnected', JSON.parse(response.body));
+                        logger && logger.debug('Register Disconnected', JSON.parse(response.body));
                     });
                     client.subscribe('/topic/' + locationObject.store + '/' + locationObject.register, (response) => {
                         const message = JSON.parse(response.body);
-                        logger.info('/topic/' + locationObject.store + '/' + locationObject.register, message);
-                        onMessage(message);
+                        logger && logger.info('/topic/' + locationObject.store + '/' + locationObject.register, message);
+                        onMessage && onMessage(message);
                     });
                     client.publish({
                         destination: '/app/connect',
@@ -43,19 +43,19 @@ export function createSocket({ url, onConnect, onDisconnect, onMessage, logger }
                     location.current = locationObject;
                     window.removeEventListener('beforeunload', createSocket.disconnect);
                     window.addEventListener('beforeunload', createSocket.disconnect);
-                    onConnect();
+                    onConnect && onConnect();
                 },
                 onStompError: (frame) => {
                     console.error('Broker reported error: ' + frame.headers['message']);
                     console.error('Additional details: ' + frame.body);
                 },
                 onWebSocketClose: () => {
-                    logger.info('WebSocket Disconnected', location.current, true)
+                    logger && logger.info('WebSocket Disconnected', location.current, true)
                     if (connectedState.current) {
                         console.error('Unexpected disconnect, trying to reconnect.')
                         setTimeout(() => { window.location.reload() }, 5000);
                     }
-                    onDisconnect();
+                    onDisconnect && onDisconnect();
                 }
             });
             client.activate();
