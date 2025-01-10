@@ -7,11 +7,11 @@ export function createApi({ url, logger, onError }) {
             try {
                 const response = await fetch(url + query);
                 const json = await response.json();
-                logger.info(query, json);
+                logger && logger.info(query, json);
                 callback(json);
             } catch {
-                logger.error(url, 'ERROR!!', true);
-                setTimeout(onError, 1000)
+                logger && logger.error(url, 'ERROR!!', true);
+                onError && setTimeout(onError, 1000)
             }
         },
     };
