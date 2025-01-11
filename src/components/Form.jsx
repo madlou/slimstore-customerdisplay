@@ -1,8 +1,14 @@
 import { Button, NumberInput, Paper } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import React from 'react'
+import { useContext } from 'react'
+import { TranslationContext } from '../context/TranslationProvider';
+import { LocationContext } from '../context/LocationProvider';
+import { SocketContext } from '../context/SocketProvider';
 
-const Form = ({ location, setLocation, translations }) => {
+const Form = () => {
+    const { translations } = useContext(TranslationContext);
+    const { location, setLocation } = useContext(LocationContext);
+    const { status } = useContext(SocketContext);
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: location,
@@ -11,37 +17,39 @@ const Form = ({ location, setLocation, translations }) => {
             register: (value) => (/^[0-9]{1,2}$/.test(value) ? null : 'Invalid register number'),
         }
     });
-    return (
-        <Paper
-            flex={1}
-            m={16}
-            p={32}
-        >
-            <form onSubmit={form.onSubmit((values) => setLocation(values))}>
-                <NumberInput
-                    key={form.key('store')}
-                    label={translations.store}
-                    mt={16}
-                    {...form.getInputProps('store')}
-                />
-                <NumberInput
-                    key={form.key('register')}
-                    label={translations.register}
-                    mt={16}
-                    {...form.getInputProps('register')}
-                />
+    return (<>
+        {status == 'CHANGESTORE' ? (
+            <Paper
+                flex={1}
+                m={16}
+                p={32}
+            >
+                <form onSubmit={form.onSubmit((values) => setLocation({ ...values }))}>
+                    <NumberInput
+                        key={form.key('store')}
+                        label={translations?.store}
+                        mt={16}
+                        {...form.getInputProps('store')}
+                    />
+                    <NumberInput
+                        key={form.key('register')}
+                        label={translations?.register}
+                        mt={16}
+                        {...form.getInputProps('register')}
+                    />
+                    <Button
+                        mt={16}
+                        type={'submit'}
+                    >{translations?.update}</Button>
+                </form>
                 <Button
                     mt={16}
-                    type={'submit'}
-                >{translations.update}</Button>
-            </form>
-            <Button
-                mt={16}
-                onClick={() => { window.location.reload() }}
-                display={location.store ? 'block' : 'none'}
-            >{translations.cancel}</Button>
-        </Paper>
-    )
+                    onClick={() => { window.location.reload() }}
+                    display={location.store ? 'block' : 'none'}
+                >{translations?.cancel}</Button>
+            </Paper>
+        ) : ''}
+    </>)
 }
 
 export default Form

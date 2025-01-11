@@ -1,7 +1,13 @@
 import { Container, Group, Title } from '@mantine/core'
-import React from 'react'
+import { useContext } from 'react'
+import { LocationContext } from '../context/LocationProvider';
+import { SocketContext } from '../context/SocketProvider';
 
-const Footer = ({ store, register, socket }) => {
+const Footer = () => {
+    const { register, store } = useContext(LocationContext);
+    const { socket } = useContext(SocketContext);
+    const storeNumber = store?.number?.pad(4) ?? '0000';
+    const registerNumber = register?.number?.pad(2) ?? '00';
     return (
         <Container>
             <Group
@@ -11,7 +17,7 @@ const Footer = ({ store, register, socket }) => {
                 <Title
                     order={4}
                     c={'grey'}>
-                    {store.number.pad(4) + '-' + register.number.pad(2)}
+                    {storeNumber}-{registerNumber}
                 </Title>
             </Group>
         </Container>

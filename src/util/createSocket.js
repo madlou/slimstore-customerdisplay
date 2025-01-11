@@ -1,14 +1,18 @@
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs';
 import { useRef } from 'react';
+import { createLogger } from './createLogger';
 
-export function createSocket({ url, onConnect, onDisconnect, onMessage, logger }) {
+export function createSocket({ url, onConnect, onDisconnect, onMessage }) {
     if (typeof url !== 'string') {
         throw Error('Expected url to be a string. Received: ' + url);
     }
     const stompClient = useRef(null);
     const location = useRef(null);
     const connectedState = useRef(null);
+    const logger = createLogger({
+        level: import.meta.env.VITE_LOG_TO_CONSOLE,
+    })
     return {
         connect: (locationObject) => {
             connectedState.current = true;

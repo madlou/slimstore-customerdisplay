@@ -1,12 +1,24 @@
 import { MantineProvider } from '@mantine/core';
-import '@mantine/core/styles.css';
+import { LocationProvider } from './context/LocationProvider';
+import { ResponsiveProvider } from './context/ResponsiveProvider';
+import { SocketProvider } from './context/SocketProvider';
+import { TranslationProvider } from './context/TranslationProvider';
 import Main from './components/Main';
+import '@mantine/core/styles.css';
 
 const App = () => {
     return (
-        <MantineProvider withGlobalStyles withNormalizeCSS >
-            <Main />
-        </MantineProvider >
+        <ResponsiveProvider>
+            <TranslationProvider>
+                <LocationProvider>
+                    <SocketProvider>
+                        <MantineProvider withGlobalStyles withNormalizeCSS >
+                            <Main />
+                        </MantineProvider >
+                    </SocketProvider>
+                </LocationProvider>
+            </TranslationProvider>
+        </ResponsiveProvider>
     )
 }
 

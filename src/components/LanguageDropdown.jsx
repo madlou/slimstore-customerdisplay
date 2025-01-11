@@ -1,12 +1,15 @@
 import { Select } from '@mantine/core';
+import { useContext } from 'react';
+import { TranslationContext } from '../context/TranslationProvider';
 
-function LanguageDropdown(props) {
+function LanguageDropdown() {
+    const { language, setLanguage, languages } = useContext(TranslationContext);
     return (
         <>
             <Select
-                data={props.languages}
-                onChange={props.setLanguage}
-                value={props.language}
+                data={languages}
+                onChange={setLanguage}
+                value={language}
                 w={80}
             />
         </>

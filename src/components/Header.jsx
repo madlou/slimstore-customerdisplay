@@ -1,8 +1,12 @@
-import React from 'react'
-import LanguageDropdown from './LanguageDropdown'
+import { useContext } from 'react'
 import { Container, Group, Title } from '@mantine/core'
+import { TranslationContext } from '../context/TranslationProvider';
+import { LocationContext } from '../context/LocationProvider';
+import LanguageDropdown from './LanguageDropdown'
 
-const Header = ({ languages, language, setLanguage, store, translations }) => {
+const Header = () => {
+    const { translations } = useContext(TranslationContext);
+    const { store } = useContext(LocationContext);
     return (
         <Container
             w={'100%'}
@@ -16,7 +20,7 @@ const Header = ({ languages, language, setLanguage, store, translations }) => {
                     order={1}
                     pt={4}
                 >
-                    {translations.logo}
+                    {translations?.logo ?? ''}
                 </Title>
                 <Title
                     order={2}
@@ -25,11 +29,7 @@ const Header = ({ languages, language, setLanguage, store, translations }) => {
                 >
                     {store?.name ?? ''}
                 </Title>
-                <LanguageDropdown
-                    language={language}
-                    languages={languages}
-                    setLanguage={setLanguage}
-                />
+                <LanguageDropdown />
             </Group>
         </Container>
     )

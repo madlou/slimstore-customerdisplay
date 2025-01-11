@@ -1,7 +1,12 @@
-export function createApi({ url, logger, onError }) {
+import { createLogger } from "./createLogger";
+
+export function createApi({ url, onError }) {
     if (typeof url !== 'string') {
         throw Error('Expected url to be a string. Received: ' + url);
     }
+    const logger = createLogger({
+        level: import.meta.env.VITE_LOG_TO_CONSOLE,
+    })
     return {
         get: async (callback, query) => {
             try {
