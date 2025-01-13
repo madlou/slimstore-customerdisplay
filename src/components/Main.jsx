@@ -10,7 +10,7 @@ import Welcome from './Welcome';
 import '@mantine/core/styles.css';
 
 const Main = () => {
-    const { width } = useContext(ResponsiveContext);
+    const { isMobile } = useContext(ResponsiveContext);
     return (
         <AppShell
             header={{ height: 16 * 3 }}
@@ -27,7 +27,7 @@ const Main = () => {
                     maw={800}
                     display={'flex'}
                     flex={1}
-                    style={{ paddingInline: width < 992 ? 0 : 'var(--mantine-spacing-md)' }}
+                    style={{ paddingInline: isMobile ? 0 : 'var(--mantine-spacing-md)' }}
                 >
                     <Connecting />
                     <Form />

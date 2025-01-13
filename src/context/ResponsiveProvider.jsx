@@ -6,6 +6,7 @@ export const ResponsiveContext = createContext();
 export const ResponsiveProvider = ({ children }) => {
     const { width } = useViewportSize();
     const [fontSize, setFontSize] = useState(24);
+    const [isMobile, setIsMobile] = useState(false);
     const breakpoint = {
         xs: 576,
         sm: 768,
@@ -13,6 +14,9 @@ export const ResponsiveProvider = ({ children }) => {
         lg: 1200,
         xl: 1408,
     }
+    const scrollHeight = isMobile ?
+        'calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px) - 60px)' :
+        'calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px) - 150px)';
     useEffect(() => {
         if (width < breakpoint.xs) {
             setFontSize(16);
@@ -27,13 +31,18 @@ export const ResponsiveProvider = ({ children }) => {
         } else {
             setFontSize(26)
         }
+        setIsMobile(width < breakpoint.md)
     }, [width]);
     useEffect(() => {
         document.documentElement.style.fontSize = fontSize + 'px';
     }, [fontSize]);
     return (
         <ResponsiveContext.Provider
-            value={{ fontSize, setFontSize, width }}
+            value={{
+                fontSize, setFontSize,
+                scrollHeight,
+                isMobile,
+            }}
         >
             {children}
         </ResponsiveContext.Provider>

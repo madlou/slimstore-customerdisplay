@@ -9,9 +9,9 @@ import moneyConverter from '../util/moneyConverter.js';
 function Basket() {
     const { translations } = useContext(TranslationContext);
     const { store } = useContext(LocationContext);
-    const { width } = useContext(ResponsiveContext);
+    const { scrollHeight, isMobile } = useContext(ResponsiveContext);
     const { basket, tender } = useContext(SocketContext);
-    const isMobile = width < 992;
+    const basketBottomRef = useRef(null);
     let total = 0;
     let lines = 0;
     let items = 0;
@@ -28,22 +28,13 @@ function Basket() {
     if (tenders != 0) {
         difference = tenders - total;
     }
-    const basketBottomRef = useRef(null);
-    const scrollToBottom = () => {
-        if (basketBottomRef.current) {
-            basketBottomRef.current.scrollIntoView({
+    useEffect(() => {
+        setTimeout(() => {
+            basketBottomRef.current && basketBottomRef.current.scrollIntoView({
                 behavior: 'smooth',
                 block: 'nearest',
                 inline: 'center'
             });
-        }
-    }
-    const scrollHeight = isMobile ?
-        'calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px) - 60px)' :
-        'calc(100vh - var(--app-shell-header-height, 0px) - var(--app-shell-footer-height, 0px) - 150px)';
-    useEffect(() => {
-        setTimeout(() => {
-            scrollToBottom()
         }, 100)
     }, [basket, tender]);
     return (<>
