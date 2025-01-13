@@ -3,7 +3,7 @@ import { useViewportSize } from '@mantine/hooks';
 
 export const ResponsiveContext = createContext();
 
-export const ResponsiveProvider = props => {
+export const ResponsiveProvider = ({ children }) => {
     const { width } = useViewportSize();
     const [fontSize, setFontSize] = useState(24);
     const breakpoint = {
@@ -35,7 +35,7 @@ export const ResponsiveProvider = props => {
         <ResponsiveContext.Provider
             value={{ fontSize, setFontSize, width }}
         >
-            {props.children}
+            {children}
         </ResponsiveContext.Provider>
     );
 };

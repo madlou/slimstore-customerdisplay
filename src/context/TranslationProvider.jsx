@@ -3,7 +3,7 @@ import { createApi } from "../util/createApi";
 
 export const TranslationContext = createContext();
 
-export const TranslationProvider = props => {
+export const TranslationProvider = ({ children }) => {
     const [language, setLanguage] = useState('EN');
     const [languages, setLanguages] = useState([]);
     const [translations, setTranslations] = useState(null);
@@ -24,7 +24,7 @@ export const TranslationProvider = props => {
                 translations, setTranslations,
             }}
         >
-            {props.children}
+            {children}
         </TranslationContext.Provider>
     );
 };

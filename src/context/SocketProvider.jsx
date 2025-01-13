@@ -6,7 +6,7 @@ import { createSocket } from "../util/createSocket";
 
 export const SocketContext = createContext();
 
-export const SocketProvider = props => {
+export const SocketProvider = ({ children }) => {
     const { register, location, getInitialLocationData } = useContext(LocationContext);
     const { languages } = useContext(TranslationContext);
     const [basket, setBasket] = useState([]);
@@ -73,7 +73,7 @@ export const SocketProvider = props => {
                 socket
             }}
         >
-            {props.children}
+            {children}
         </SocketContext.Provider>
     );
 };

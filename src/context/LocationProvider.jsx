@@ -5,7 +5,7 @@ import { createApi } from "../util/createApi";
 
 export const LocationContext = createContext();
 
-export const LocationProvider = props => {
+export const LocationProvider = ({ children }) => {
     const cookies = new Cookies();
     const { setLanguage, storeLanguage } = useContext(TranslationContext);
     const [register, setRegister] = useState(null);
@@ -53,7 +53,7 @@ export const LocationProvider = props => {
                 getInitialLocationData
             }}
         >
-            {props.children}
+            {children}
         </LocationContext.Provider>
     );
 };
