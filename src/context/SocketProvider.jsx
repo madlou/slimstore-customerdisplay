@@ -8,7 +8,7 @@ export const SocketContext = createContext();
 
 export const SocketProvider = ({ children }) => {
     const { register, location, getInitialLocationData } = useContext(LocationContext);
-    const { languages } = useContext(TranslationContext);
+    const { languages, setLanguage, storeLanguage } = useContext(TranslationContext);
     const [basket, setBasket] = useState([]);
     const [tender, setTender] = useState([]);
     const [status, setStatus] = useState('CONNECTING');
