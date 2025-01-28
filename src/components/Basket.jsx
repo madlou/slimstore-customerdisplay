@@ -17,8 +17,14 @@ function Basket() {
     let items = 0;
     let tenders = 0;
     let difference = null;
+    const isReturn = (line) => {
+        if (['RETURN', 'RETURN_MANUAL'].includes(line.type)) {
+            return true;
+        }
+        return false;
+    }
     basket.map((line, i) => {
-        total += line.quantity * line.unitValue * (line.type == 'RETURN' ? -1 : 1);
+        total += line.quantity * line.unitValue * (isReturn(line) ? -1 : 1);
         items += line.quantity;
         lines++;
     })
@@ -58,7 +64,7 @@ function Basket() {
                                         justify='space-between'
                                     >
                                         <Text>
-                                            {line.quantity * (line.type == 'RETURN' ? -1 : 1)}
+                                            {line.quantity * (isReturn(line) ? -1 : 1)}
                                             &nbsp;@&nbsp;
                                             {moneyConverter(
                                                 store.countryCode,
@@ -70,7 +76,7 @@ function Basket() {
                                             {moneyConverter(
                                                 store.countryCode,
                                                 store.currencyCode,
-                                                (line.quantity * (line.type == 'RETURN' ? -1 : 1) * line.unitValue),
+                                                (line.quantity * (isReturn(line) ? -1 : 1) * line.unitValue),
                                             )}
                                         </Text>
                                     </Group>
