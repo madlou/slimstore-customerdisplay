@@ -127,7 +127,7 @@ function Basket() {
                                 </Text>
                             </Box>
                         )}
-                        { tenders >= total ? <Review /> : ''}
+                        { tenders >= total && difference == 0 ? <Review /> : ''}
                         <div ref={basketBottomRef}></div>
                     </Box>
                 </ScrollArea.Autosize>
