@@ -1,16 +1,16 @@
 import { useRef, useEffect, useContext } from 'react'
 import { Text, Box, Group, Divider, ScrollArea, Paper } from '@mantine/core';
-import { TranslationContext } from '../context/TranslationProvider.jsx';
-import { LocationContext } from '../context/LocationProvider';
-import { ResponsiveContext } from '../context/ResponsiveProvider';
-import { SocketContext } from '../context/SocketProvider';
-import moneyConverter from '../util/moneyConverter.js';
+import { TranslationContext } from '../providers/TranslationProvider';
+import { ResponsiveContext } from '../providers/ResponsiveProvider';
+import { SocketContext } from '../providers/SocketProvider';
+import { LocationContext } from '../providers/LocationProvider';
+import Review from './Review'
 
 function Basket() {
     const { translations } = useContext(TranslationContext);
-    const { store } = useContext(LocationContext);
     const { scrollHeight, isMobile } = useContext(ResponsiveContext);
     const { basket, tender } = useContext(SocketContext);
+    const { formatMoney } = useContext(LocationContext);
     const basketBottomRef = useRef(null);
     let total = 0;
     let lines = 0;
@@ -23,12 +23,12 @@ function Basket() {
         }
         return false;
     }
-    basket.map((line, i) => {
+    basket.map((line) => {
         total += line.quantity * line.unitValue * (isReturn(line) ? -1 : 1);
         items += line.quantity;
         lines++;
     })
-    tender.map((line, i) => {
+    tender.map((line) => {
         tenders += line.value;
     })
     if (tenders != 0) {
@@ -66,18 +66,10 @@ function Basket() {
                                         <Text>
                                             {line.quantity * (isReturn(line) ? -1 : 1)}
                                             &nbsp;@&nbsp;
-                                            {moneyConverter(
-                                                store.countryCode,
-                                                store.currencyCode,
-                                                line.unitValue,
-                                            )}
+                                            {formatMoney(line.unitValue)}
                                         </Text>
                                         <Text>
-                                            {moneyConverter(
-                                                store.countryCode,
-                                                store.currencyCode,
-                                                (line.quantity * (isReturn(line) ? -1 : 1) * line.unitValue),
-                                            )}
+                                            {formatMoney(line.quantity * (isReturn(line) ? -1 : 1) * line.unitValue)}
                                         </Text>
                                     </Group>
                                 </Box>
@@ -89,11 +81,7 @@ function Basket() {
                                 <Text>
                                     {translations.subtotal}
                                     :&nbsp;
-                                    {moneyConverter(
-                                        store.countryCode,
-                                        store.currencyCode,
-                                        total,
-                                    )}
+                                    {formatMoney(total)}
                                 </Text>
                                 <Text>
                                     {translations.transactionLines}
@@ -114,11 +102,7 @@ function Basket() {
                                     return <Text key={i}>
                                         {translations[line.label.toCamelCase()]}
                                         &nbsp;
-                                        {moneyConverter(
-                                            store.countryCode,
-                                            store.currencyCode,
-                                            line.value,
-                                        )}
+                                        {formatMoney(line.value)}
                                     </Text>
 
                                 })}
@@ -130,11 +114,7 @@ function Basket() {
                                 <Text>
                                     {translations.tenderTotal}
                                     :&nbsp;
-                                    {moneyConverter(
-                                        store.countryCode,
-                                        store.currencyCode,
-                                        tenders,
-                                    )}
+                                    {formatMoney(tenders)}
                                 </Text>
                             </Box>
                         )}
@@ -143,14 +123,11 @@ function Basket() {
                                 <Text>
                                     {translations.difference}
                                     :&nbsp;
-                                    {moneyConverter(
-                                        store.countryCode,
-                                        store.currencyCode,
-                                        difference,
-                                    )}
+                                    {formatMoney(difference)}
                                 </Text>
                             </Box>
                         )}
+                        { tenders >= total ? <Review /> : ''}
                         <div ref={basketBottomRef}></div>
                     </Box>
                 </ScrollArea.Autosize>

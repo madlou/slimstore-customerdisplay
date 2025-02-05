@@ -1,7 +1,7 @@
 import { useContext } from 'react'
 import { Container, Group, Title } from '@mantine/core'
-import { TranslationContext } from '../context/TranslationProvider';
-import { LocationContext } from '../context/LocationProvider';
+import { TranslationContext } from '../providers/TranslationProvider';
+import { LocationContext } from '../providers/LocationProvider';
 import LanguageDropdown from './LanguageDropdown'
 
 const Header = () => {

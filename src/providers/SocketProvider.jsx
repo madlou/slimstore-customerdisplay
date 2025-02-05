@@ -1,19 +1,21 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import { LocationContext } from '../context/LocationProvider';
+import { LocationContext } from '../providers/LocationProvider';
 import { TranslationContext } from "./TranslationProvider";
-import { createApi } from "../util/createApi";
-import { createSocket } from "../util/createSocket";
+import { useApi } from "../hooks/useApi";
+import { useSocket } from "../hooks/useSocket";
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const SocketContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const SocketProvider = ({ children }) => {
-    const { register, location, getInitialLocationData } = useContext(LocationContext);
+    const { register, location, getInitialLocationData, setTransaction } = useContext(LocationContext);
     const { languages, setLanguage, storeLanguage } = useContext(TranslationContext);
     const [basket, setBasket] = useState([]);
     const [tender, setTender] = useState([]);
     const [status, setStatus] = useState('CONNECTING');
     const [showThankyou, setShowThankyou] = useState(false);
-    const socket = createSocket({
+    const socket = useSocket({
         url: '/websocket',
         onConnect: () => {
             setStatus("CONNECTED");
@@ -29,6 +31,7 @@ export const SocketProvider = ({ children }) => {
         onMessage: (message) => {
             if (message.status) {
                 setStatus(message.status);
+                setTransaction(message?.transactionNumber ?? 0)
             } else if (message.tender) {
                 setTender(message.tender ?? []);
                 if (message.tender.length === 0) {
@@ -44,7 +47,7 @@ export const SocketProvider = ({ children }) => {
             }
         },
     });
-    const api = createApi({
+    const api = useApi({
         url: '/api',
         onError: socket.disconnect
     });
@@ -62,6 +65,7 @@ export const SocketProvider = ({ children }) => {
         if (location.store && location.register) {
             socket.connect(location);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location]);
     return (
         <SocketContext.Provider

@@ -1,6 +1,6 @@
-import { Select } from '@mantine/core';
 import { useContext } from 'react';
-import { TranslationContext } from '../context/TranslationProvider';
+import { Select } from '@mantine/core';
+import { TranslationContext } from '../providers/TranslationProvider';
 
 function LanguageDropdown() {
     const { language, setLanguage, languages } = useContext(TranslationContext);

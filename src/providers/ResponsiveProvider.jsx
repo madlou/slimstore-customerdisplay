@@ -1,8 +1,10 @@
 import { createContext, useState, useEffect } from "react";
 import { useViewportSize } from '@mantine/hooks';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const ResponsiveContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const ResponsiveProvider = ({ children }) => {
     const { width } = useViewportSize();
     const [fontSize, setFontSize] = useState(24);
@@ -32,6 +34,7 @@ export const ResponsiveProvider = ({ children }) => {
             setFontSize(26)
         }
         setIsMobile(width < breakpoint.md)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [width]);
     useEffect(() => {
         document.documentElement.style.fontSize = fontSize + 'px';

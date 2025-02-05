@@ -1,17 +1,22 @@
 import { createContext, useState, useEffect, useContext } from "react";
-import Cookies from 'universal-cookie';
 import { TranslationContext } from './TranslationProvider';
-import { createApi } from "../util/createApi";
+import { useMoney } from '../hooks/useMoney';
+import { useApi } from "../hooks/useApi";
+import Cookies from 'universal-cookie';
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const LocationContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const LocationProvider = ({ children }) => {
     const cookies = new Cookies();
     const { setLanguage, storeLanguage } = useContext(TranslationContext);
     const [register, setRegister] = useState(null);
     const [location, setLocation] = useState({ store: null, register: null });
     const [store, setStore] = useState(null);
-    const api = createApi({ url: '/api' });
+    const [transaction, setTransaction] = useState(0);
+    const { updateMoney, formatMoney } = useMoney();
+    const api = useApi({ url: '/api' });
     const getInitialLocationData = () => {
         api.get(setStore, '/location/' + location.store);
         api.get(setRegister, '/location/' + location.store + '/' + location.register);
@@ -28,13 +33,25 @@ export const LocationProvider = ({ children }) => {
                 },
             );
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
     useEffect(() => {
         if (store) {
             setLanguage(store.languageCode);
+            updateMoney({
+                currencyCode: store.currencyCode,
+                countryCode: store.countryCode,
+            })
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [store])
+    useEffect(() => {
+        if (register) {
+            setTransaction(register.languageCode);
             storeLanguage.current = store.languageCode;
         }
-    }, [store])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [register])
     useEffect(() => {
         if (cookies.get('store-register')) {
             const cookieSplit = cookies.get('store-register').split('-');
@@ -43,6 +60,7 @@ export const LocationProvider = ({ children }) => {
                 register: cookieSplit[1] * 1,
             });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <LocationContext.Provider
@@ -50,7 +68,9 @@ export const LocationProvider = ({ children }) => {
                 register, setRegister,
                 location, setLocation,
                 store, setStore,
-                getInitialLocationData
+                transaction, setTransaction,
+                getInitialLocationData,
+                formatMoney,
             }}
         >
             {children}

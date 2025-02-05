@@ -1,14 +1,20 @@
-export function createLogger({ level }) {
+export function useLogger({ level }) {
     let logDebug = false;
     let logInfo = false;
     let logError = false;
     switch (level) {
         case 'debug':
             logDebug = true;
+            logInfo = true;
+            logError = true;
+            break;
         case 'info':
             logInfo = true;
+            logError = true;
+            break;
         case 'error':
             logError = true;
+            break;
     }
     return {
         debug: (key, value) => {

@@ -1,10 +1,10 @@
-import { createLogger } from "./createLogger";
+import { useLogger } from "./useLogger";
 
-export function createApi({ url, onError }) {
+export function useApi({ url, onError }) {
     if (typeof url !== 'string') {
         throw Error('Expected url to be a string. Received: ' + url);
     }
-    const logger = createLogger({
+    const logger = useLogger({
         level: import.meta.env.VITE_LOG_TO_CONSOLE,
     })
     return {

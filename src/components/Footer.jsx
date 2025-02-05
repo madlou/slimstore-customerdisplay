@@ -1,7 +1,7 @@
-import { Container, Group, Title } from '@mantine/core'
 import { useContext } from 'react'
-import { LocationContext } from '../context/LocationProvider';
-import { SocketContext } from '../context/SocketProvider';
+import { Container, Group, Title } from '@mantine/core'
+import { LocationContext } from '../providers/LocationProvider';
+import { SocketContext } from '../providers/SocketProvider';
 
 const Footer = () => {
     const { register, store } = useContext(LocationContext);

@@ -1,8 +1,8 @@
 import { MantineProvider } from '@mantine/core';
-import { LocationProvider } from './context/LocationProvider';
-import { ResponsiveProvider } from './context/ResponsiveProvider';
-import { SocketProvider } from './context/SocketProvider';
-import { TranslationProvider } from './context/TranslationProvider';
+import { LocationProvider } from './providers/LocationProvider';
+import { ResponsiveProvider } from './providers/ResponsiveProvider';
+import { SocketProvider } from './providers/SocketProvider';
+import { TranslationProvider } from './providers/TranslationProvider';
 import Main from './components/Main';
 import '@mantine/core/styles.css';
 

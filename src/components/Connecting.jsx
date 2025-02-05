@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Center, Paper } from '@mantine/core'
-import { TranslationContext } from '../context/TranslationProvider';
-import { SocketContext } from '../context/SocketProvider';
+import { TranslationContext } from '../providers/TranslationProvider';
+import { SocketContext } from '../providers/SocketProvider';
 
 const Connecting = () => {
     const { translations } = useContext(TranslationContext);

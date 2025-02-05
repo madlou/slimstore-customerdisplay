@@ -1,9 +1,9 @@
+import { useContext } from 'react'
 import { Button, NumberInput, Paper } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { useContext } from 'react'
-import { TranslationContext } from '../context/TranslationProvider';
-import { LocationContext } from '../context/LocationProvider';
-import { SocketContext } from '../context/SocketProvider';
+import { TranslationContext } from '../providers/TranslationProvider';
+import { LocationContext } from '../providers/LocationProvider';
+import { SocketContext } from '../providers/SocketProvider';
 
 const Form = () => {
     const { translations } = useContext(TranslationContext);

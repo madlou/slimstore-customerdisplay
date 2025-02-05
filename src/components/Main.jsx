@@ -1,13 +1,12 @@
 import { useContext } from 'react';
 import { AppShell, Container } from '@mantine/core';
-import { ResponsiveContext } from '../context/ResponsiveProvider';
+import { ResponsiveContext } from '../providers/ResponsiveProvider';
 import Basket from './Basket';
 import Connecting from './Connecting';
 import Form from './Form';
 import Footer from './Footer';
 import Header from './Header';
 import Welcome from './Welcome';
-import '@mantine/core/styles.css';
 
 const Main = () => {
     const { isMobile } = useContext(ResponsiveContext);
