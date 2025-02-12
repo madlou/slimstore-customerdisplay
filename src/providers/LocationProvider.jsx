@@ -10,19 +10,47 @@ export const LocationContext = createContext();
 // eslint-disable-next-line react/prop-types
 export const LocationProvider = ({ children }) => {
     const cookies = new Cookies();
-    const { setLanguage, storeLanguage } = useContext(TranslationContext);
-    const [register, setRegister] = useState(null);
-    const [location, setLocation] = useState({ store: null, register: null });
-    const [store, setStore] = useState(null);
-    const [transaction, setTransaction] = useState(0);
+    const { translations, setLanguage, storeLanguage } = useContext(TranslationContext);
+    const [ register, setRegister ] = useState(null);
+    const [ location, setLocation ] = useState({ store: null, register: null, pin: null });
+    const [ authError, setAuthError ] = useState(null);
+    const [ store, setStore ] = useState(null);
+    const [ transaction, setTransaction ] = useState(0);
     const { updateMoney, formatMoney } = useMoney();
-    const api = useApi({ url: '/api' });
+    const apiError = ( response, json ) => {
+        if([400, 401].includes(response.status)){
+            setAuthError(json);
+        }
+    }
+    const api = useApi({ url: '/api', onError: apiError });
     const getInitialLocationData = () => {
         api.get(setStore, '/location/' + location.store);
-        api.get(setRegister, '/location/' + location.store + '/' + location.register);
+    }
+    const authenticationCheck = (response) => {
+        if(response.token){
+            setAuthError(null);
+            cookies.set(
+                'token',
+                response.token,
+                {
+                    path: '/',
+                    maxAge: 60 * 60 * 24 * 365,
+                    sameSite: 'Strict',
+                },
+            );
+            setTimeout(() => {
+                window.location.reload();
+            }, 500);
+        } else {
+            setAuthError(response.error ?? "Error");
+        }
     }
     useEffect(() => {
         if (location.store && location.register) {
+            if(location.pin){
+                api.get(authenticationCheck, '/public/display/authentication/' 
+                    + location.store + '/' + location.register + '/' + location.pin);
+            }
             cookies.set(
                 'store-register',
                 location.store + '-' + location.register,
@@ -34,9 +62,10 @@ export const LocationProvider = ({ children }) => {
             );
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location])
+    }, [ location ])
     useEffect(() => {
         if (store) {
+            api.get(setRegister, '/location/' + location.store + '/' + location.register);
             setLanguage(store.languageCode);
             updateMoney({
                 currencyCode: store.currencyCode,
@@ -44,16 +73,16 @@ export const LocationProvider = ({ children }) => {
             })
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [store])
+    }, [ store ])
     useEffect(() => {
         if (register) {
             setTransaction(register.languageCode);
             storeLanguage.current = store.languageCode;
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [register])
+    }, [ register ])
     useEffect(() => {
-        if (cookies.get('store-register')) {
+        if (translations && cookies.get('store-register')) {
             const cookieSplit = cookies.get('store-register').split('-');
             setLocation({
                 store: cookieSplit[0] * 1,
@@ -61,10 +90,11 @@ export const LocationProvider = ({ children }) => {
             });
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [ translations ]);
     return (
         <LocationContext.Provider
             value={{
+                authError,
                 register, setRegister,
                 location, setLocation,
                 store, setStore,
@@ -73,7 +103,7 @@ export const LocationProvider = ({ children }) => {
                 formatMoney,
             }}
         >
-            {children}
+            { children }
         </LocationContext.Provider>
     );
 };

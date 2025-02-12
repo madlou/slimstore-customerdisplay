@@ -5,8 +5,8 @@ import { useApi } from '../hooks/useApi'
 import ReviewStar from './ReviewStar';
 
 const Review = () => {
-    const [animate, setAnimate] = useState(0);
-    const [showThankyou, setShowThankyou] = useState(false);
+    const [ animate, setAnimate ] = useState(0);
+    const [ showThankyou, setShowThankyou ] = useState(false);
     const { register, store, transaction } = useContext(LocationContext);
     const interval = useRef(null);
     const increment = ()=>{
@@ -49,10 +49,10 @@ const Review = () => {
                 <Center>
                     {[1, 2, 3, 4, 5].map((value)=>{
                         return <ReviewStar
-                            key={value} 
-                            value={value} 
+                            key={ value } 
+                            value={ value } 
                             filled={animate >= value} 
-                            clicked={clicked} 
+                            clicked={ clicked } 
                         />
                     })}
                 </Center>

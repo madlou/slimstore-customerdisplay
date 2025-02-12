@@ -7,8 +7,8 @@ export const ResponsiveContext = createContext();
 // eslint-disable-next-line react/prop-types
 export const ResponsiveProvider = ({ children }) => {
     const { width } = useViewportSize();
-    const [fontSize, setFontSize] = useState(24);
-    const [isMobile, setIsMobile] = useState(false);
+    const [ fontSize, setFontSize ] = useState(24);
+    const [ isMobile, setIsMobile ] = useState(false);
     const breakpoint = {
         xs: 576,
         sm: 768,
@@ -35,10 +35,10 @@ export const ResponsiveProvider = ({ children }) => {
         }
         setIsMobile(width < breakpoint.md)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [width]);
+    }, [ width ]);
     useEffect(() => {
         document.documentElement.style.fontSize = fontSize + 'px';
-    }, [fontSize]);
+    }, [ fontSize ]);
     return (
         <ResponsiveContext.Provider
             value={{
@@ -47,7 +47,7 @@ export const ResponsiveProvider = ({ children }) => {
                 isMobile,
             }}
         >
-            {children}
+            { children }
         </ResponsiveContext.Provider>
     );
 };

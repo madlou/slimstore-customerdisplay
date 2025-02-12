@@ -1,8 +1,8 @@
 import { useState } from "react";
 
 export function useMoney(props) {
-    const [currencyCode, setCurrencyCode] = useState(props?.currencyCode ?? null);
-    const [countryCode, setCountryCode] = useState(props?.countryCode ?? null);
+    const [ currencyCode, setCurrencyCode ] = useState(props?.currencyCode ?? null);
+    const [ countryCode, setCountryCode ] = useState(props?.countryCode ?? null);
     const currencyMap = {
         EUR: '€',
         GBP: '£',

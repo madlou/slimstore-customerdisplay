@@ -53,7 +53,7 @@ function Basket() {
             >
                 <ScrollArea.Autosize
                     mx='auto'
-                    mah={scrollHeight}
+                    mah={ scrollHeight }
                 >
                     <Box w={'95%'}>
                         {basket.map((line, i) => {
@@ -86,12 +86,12 @@ function Basket() {
                                 <Text>
                                     {translations.transactionLines}
                                     :&nbsp;
-                                    {lines}
+                                    { lines }
                                 </Text>
                                 <Text>
                                     {translations.items}
                                     :&nbsp;
-                                    {items}
+                                    { items }
                                 </Text>
                             </Box>
                         )}
@@ -128,7 +128,7 @@ function Basket() {
                             </Box>
                         )}
                         { tenders >= total && difference == 0 ? <Review /> : ''}
-                        <div ref={basketBottomRef}></div>
+                        <div ref={ basketBottomRef }></div>
                     </Box>
                 </ScrollArea.Autosize>
             </Paper>

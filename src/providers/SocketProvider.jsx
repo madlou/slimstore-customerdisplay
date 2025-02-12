@@ -11,17 +11,15 @@ export const SocketContext = createContext();
 export const SocketProvider = ({ children }) => {
     const { register, location, getInitialLocationData, setTransaction } = useContext(LocationContext);
     const { languages, setLanguage, storeLanguage } = useContext(TranslationContext);
-    const [basket, setBasket] = useState([]);
-    const [tender, setTender] = useState([]);
-    const [status, setStatus] = useState('CONNECTING');
-    const [showThankyou, setShowThankyou] = useState(false);
+    const [ basket, setBasket ] = useState([]);
+    const [ tender, setTender ] = useState([]);
+    const [ status, setStatus ] = useState('CONNECTING');
+    const [ showThankyou, setShowThankyou ] = useState(false);
     const socket = useSocket({
         url: '/websocket',
         onConnect: () => {
             setStatus("CONNECTED");
             getInitialLocationData();
-            api.get(setBasket, '/basket/' + location.store + '/' + location.register);
-            api.get(setTender, '/tender/' + location.store + '/' + location.register);
         },
         onDisconnect: () => {
             setBasket([]);
@@ -55,18 +53,21 @@ export const SocketProvider = ({ children }) => {
         if (languages.length > 0) {
             setStatus('CHANGESTORE')
         }
-    }, [languages]);
+    }, [ languages ]);
     useEffect(() => {
         if (register) {
+            api.get(setBasket, '/basket/' + location.store + '/' + location.register);
+            api.get(setTender, '/tender/' + location.store + '/' + location.register);
             setStatus(register.status);
         }
-    }, [register])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [ register ])
     useEffect(() => {
         if (location.store && location.register) {
             socket.connect(location);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location]);
+    }, [ location ]);
     return (
         <SocketContext.Provider
             value={{
@@ -77,7 +78,7 @@ export const SocketProvider = ({ children }) => {
                 socket
             }}
         >
-            {children}
+            { children }
         </SocketContext.Provider>
     );
 };

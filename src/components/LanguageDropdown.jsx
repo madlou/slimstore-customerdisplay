@@ -7,9 +7,9 @@ function LanguageDropdown() {
     return (
         <>
             <Select
-                data={languages}
-                onChange={setLanguage}
-                value={language}
+                data={ languages }
+                onChange={ setLanguage }
+                value={ language }
                 w={80}
             />
         </>

@@ -17,7 +17,7 @@ const Footer = () => {
                 <Title
                     order={4}
                     c={'grey'}>
-                    {storeNumber}-{registerNumber}
+                    { storeNumber }-{ registerNumber }
                 </Title>
             </Group>
         </Container>

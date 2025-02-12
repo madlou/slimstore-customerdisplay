@@ -72,8 +72,10 @@ export function useSocket({ url, onConnect, onDisconnect, onMessage }) {
                     body: JSON.stringify(location.current),
                 });
                 setTimeout(() => {
-                    stompClient.current.deactivate();
-                    stompClient.current = null;
+                    if(stompClient.current != null){
+                        stompClient.current.deactivate();
+                        stompClient.current = null;
+                    }
                 }, 100)
             }
         },

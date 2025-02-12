@@ -6,17 +6,18 @@ export const TranslationContext = createContext();
 
 // eslint-disable-next-line react/prop-types
 export const TranslationProvider = ({ children }) => {
-    const [language, setLanguage] = useState('EN');
-    const [languages, setLanguages] = useState([]);
-    const [translations, setTranslations] = useState(null);
+    const [ language, setLanguage ] = useState('EN');
+    const [ languages, setLanguages ] = useState([]);
+    const [ translations, setTranslations ] = useState(null);
     const storeLanguage = useRef(null);
-    const api = useApi({ url: '/api' });
+    const apiError = () => {}
+    const api = useApi({ url: '/api', apiError});
     useEffect(() => {
-        api.get(setTranslations, '/ui/translations/' + language)
+        api.get(setTranslations, '/public/translations/' + language);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [language])
+    }, [ language ])
     useEffect(() => {
-        api.get(setLanguages, '/languages');
+        api.get(setLanguages, '/public/languages');
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
@@ -28,7 +29,7 @@ export const TranslationProvider = ({ children }) => {
                 translations, setTranslations,
             }}
         >
-            {children}
+            { children }
         </TranslationContext.Provider>
     );
 };

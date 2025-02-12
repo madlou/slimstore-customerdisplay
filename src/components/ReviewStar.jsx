@@ -24,7 +24,7 @@ const ReviewStar = ( { filled, value, clicked } ) => {
                     top: '-3vw', 
                     marginLeft: '-4.8vw',
                 }}
-            >{value}</Text>
+            >{ value }</Text>
         </Box>
     )
     
