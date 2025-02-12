@@ -30,28 +30,6 @@ export const LocationProvider = ({ children }) => {
         if(response.token){
             setAuthError(null);
             cookies.set(
-                'token',
-                response.token,
-                {
-                    path: '/',
-                    maxAge: 60 * 60 * 24 * 365,
-                    sameSite: 'Strict',
-                },
-            );
-            setTimeout(() => {
-                window.location.reload();
-            }, 500);
-        } else {
-            setAuthError(response.error ?? "Error");
-        }
-    }
-    useEffect(() => {
-        if (location.store && location.register) {
-            if(location.pin){
-                api.get(authenticationCheck, '/public/display/authentication/' 
-                    + location.store + '/' + location.register + '/' + location.pin);
-            }
-            cookies.set(
                 'store-register',
                 location.store + '-' + location.register,
                 {
@@ -60,6 +38,28 @@ export const LocationProvider = ({ children }) => {
                     sameSite: 'Strict',
                 },
             );
+            cookies.set(
+                'token',
+                response.token,
+                {
+                    path: '/',
+                    maxAge: 60 * 60 * 24 * 365,
+                    sameSite: 'Strict',
+                },
+            );
+        } else {
+            setAuthError(response.error ?? "Error");
+        }
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
+    }
+    useEffect(() => {
+        if (location.store && location.register) {
+            if(location.pin){
+                api.get(authenticationCheck, '/public/display/authentication/' 
+                    + location.store + '/' + location.register + '/' + location.pin);
+            }
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ location ])
