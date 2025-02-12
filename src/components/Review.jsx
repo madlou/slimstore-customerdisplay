@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext, useRef } from 'react'
 import { Center, Paper } from '@mantine/core'
 import { LocationContext } from '../providers/LocationProvider';
+import { TranslationContext } from '../providers/TranslationProvider';
 import { useApi } from '../hooks/useApi'
 import ReviewStar from './ReviewStar';
 
@@ -8,6 +9,7 @@ const Review = () => {
     const [ animate, setAnimate ] = useState(0);
     const [ showThankyou, setShowThankyou ] = useState(false);
     const { register, store, transaction } = useContext(LocationContext);
+    const { translations } = useContext(TranslationContext);
     const interval = useRef(null);
     const increment = ()=>{
         setAnimate((prev)=>{
@@ -45,20 +47,20 @@ const Review = () => {
                     mb={12} 
                     fw={'bold'} 
                     ta={'center'}
-                >Please rate your service in-store today, by pressing the applicable star!</Center>
+                >{translations.reviewMessageTop}</Center>
                 <Center>
                     {[1, 2, 3, 4, 5].map((value)=>{
                         return <ReviewStar
                             key={ value } 
                             value={ value } 
-                            filled={animate >= value} 
+                            filled={ animate >= value } 
                             clicked={ clicked } 
                         />
                     })}
                 </Center>
                 {showThankyou ? 
-                    <Center>Thank you!</Center> :
-                    <Center>The cashier will not see your score!</Center>
+                    <Center>{translations.reviewMessageThankyou}</Center> :
+                    <Center>{translations.reviewMessageBottom}</Center>
                 }
             </Paper>
     )
