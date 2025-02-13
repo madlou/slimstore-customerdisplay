@@ -6,8 +6,8 @@ import { SocketContext } from '../providers/SocketProvider';
 const Footer = () => {
     const { register, store } = useContext(LocationContext);
     const { socket } = useContext(SocketContext);
-    const storeNumber = store?.number?.pad(4) ?? '0000';
-    const registerNumber = register?.number?.pad(2) ?? '00';
+    const storeNumber = store?.number?.toString().padStart(4, "0") ?? '0000';
+    const registerNumber = register?.number?.toString().padStart(2, "0") ?? '00';
     return (
         <Container>
             <Group
