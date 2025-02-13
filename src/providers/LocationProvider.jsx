@@ -50,6 +50,7 @@ export const LocationProvider = ({ children }) => {
         } else {
             setAuthError(response.error ?? "Error");
         }
+        // TODO: Fix dirty hack - will need a largish refactor to cater for authentication
         setTimeout(() => {
             window.location.reload();
         }, 500);
