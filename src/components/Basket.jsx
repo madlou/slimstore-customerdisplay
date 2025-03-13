@@ -2,14 +2,14 @@ import { useRef, useEffect, useContext } from 'react'
 import { Text, Box, Group, Divider, ScrollArea, Paper } from '@mantine/core';
 import { TranslationContext } from '../providers/TranslationProvider';
 import { ResponsiveContext } from '../providers/ResponsiveProvider';
-import { SocketContext } from '../providers/SocketProvider';
+import { DisplayContext } from '../providers/DisplayProvider';
 import { LocationContext } from '../providers/LocationProvider';
 import Review from './Review'
 
 function Basket() {
     const { translations } = useContext(TranslationContext);
     const { scrollHeight, isMobile } = useContext(ResponsiveContext);
-    const { basket, tender } = useContext(SocketContext);
+    const { basket, tender } = useContext(DisplayContext);
     const { formatMoney } = useContext(LocationContext);
     const basketBottomRef = useRef(null);
     let total = 0;

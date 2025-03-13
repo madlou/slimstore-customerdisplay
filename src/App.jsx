@@ -1,7 +1,7 @@
 import { MantineProvider } from '@mantine/core';
 import { LocationProvider } from './providers/LocationProvider';
 import { ResponsiveProvider } from './providers/ResponsiveProvider';
-import { SocketProvider } from './providers/SocketProvider';
+import { DisplayProvider } from './providers/DisplayProvider';
 import { TranslationProvider } from './providers/TranslationProvider';
 import Main from './components/Main';
 import '@mantine/core/styles.css';
@@ -11,11 +11,11 @@ const App = () => {
         <ResponsiveProvider>
             <TranslationProvider>
                 <LocationProvider>
-                    <SocketProvider>
+                    <DisplayProvider>
                         <MantineProvider withGlobalStyles withNormalizeCSS >
                             <Main />
                         </MantineProvider >
-                    </SocketProvider>
+                    </DisplayProvider>
                 </LocationProvider>
             </TranslationProvider>
         </ResponsiveProvider>

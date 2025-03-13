@@ -1,12 +1,12 @@
 import { useContext } from 'react'
 import { Box, Center, Paper, Text } from '@mantine/core'
 import { TranslationContext } from '../providers/TranslationProvider';
-import { SocketContext } from '../providers/SocketProvider';
+import { DisplayContext } from '../providers/DisplayProvider';
 import rainbow from '../styles/Rainbow.module.css'
 
 const Welcome = () => {
     const { translations } = useContext(TranslationContext);
-    const { basket, status, showThankyou } = useContext(SocketContext);
+    const { basket, status, showThankyou } = useContext(DisplayContext);
     return (<>
         {basket.length == 0 && (status == 'CLOSED' || status == 'OPEN') ? (
             <Center

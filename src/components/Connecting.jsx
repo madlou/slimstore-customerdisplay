@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { Center, Paper } from '@mantine/core'
 import { TranslationContext } from '../providers/TranslationProvider';
-import { SocketContext } from '../providers/SocketProvider';
+import { DisplayContext } from '../providers/DisplayProvider';
 
 const Connecting = () => {
     const { translations } = useContext(TranslationContext);
-    const { status } = useContext(SocketContext);
+    const { status } = useContext(DisplayContext);
     return (<>
         {status == 'CONNECTING' ? (
             <Center

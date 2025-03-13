@@ -29,10 +29,10 @@ export function useSocket({ url, onConnect, onDisconnect, onMessage }) {
                 onConnect: () => {
                     logger && logger.info('WebSocket Connect', locationObject, true);
                     client.subscribe('/topic/connected', (response) => {
-                        logger && logger.debug('Register Connected', JSON.parse(response.body));
+                        logger && logger.debug('Device Connected', JSON.parse(response.body));
                     });
                     client.subscribe('/topic/disconnected', (response) => {
-                        logger && logger.debug('Register Disconnected', JSON.parse(response.body));
+                        logger && logger.debug('Device Disconnected', JSON.parse(response.body));
                     });
                     client.subscribe('/topic/' + locationObject.store + '/' + locationObject.register, (response) => {
                         const message = JSON.parse(response.body);

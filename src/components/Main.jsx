@@ -7,6 +7,7 @@ import Form from './Form';
 import Footer from './Footer';
 import Header from './Header';
 import Welcome from './Welcome';
+import Ped from './Ped';
 
 const Main = () => {
     const { isMobile } = useContext(ResponsiveContext);
@@ -32,6 +33,7 @@ const Main = () => {
                     <Form />
                     <Welcome />
                     <Basket />
+                    <Ped />
                 </Container>
             </AppShell.Main>
             <AppShell.Footer

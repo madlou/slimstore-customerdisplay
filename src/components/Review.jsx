@@ -23,12 +23,13 @@ const Review = () => {
         url: '/api',
     });
     const clicked = (value) => {
+        const reviewURL = '/review/add/' + store.number + '/' + register.number + '/';
         clearInterval(interval.current);
         setAnimate(value);
         setShowThankyou(true);
         api.get((json)=>{
             console.log(json)
-        }, '/review/add/' + store.number + '/' + register.number + '/' + transaction + '/' + value)
+        }, reviewURL + (transaction - 1) + '/' + value);
     }
     useEffect(()=>{
         clearInterval(interval.current)

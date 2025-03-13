@@ -3,12 +3,12 @@ import { Button, NumberInput, Paper, Text } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { TranslationContext } from '../providers/TranslationProvider';
 import { LocationContext } from '../providers/LocationProvider';
-import { SocketContext } from '../providers/SocketProvider';
+import { DisplayContext } from '../providers/DisplayProvider';
 
 const Form = () => {
     const { translations } = useContext(TranslationContext);
     const { authError, location, setLocation } = useContext(LocationContext);
-    const { status } = useContext(SocketContext);
+    const { status } = useContext(DisplayContext);
     const form = useForm({
         mode: 'uncontrolled',
         initialValues: location,

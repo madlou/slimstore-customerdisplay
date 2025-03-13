@@ -5,10 +5,10 @@ import { useApi } from "../hooks/useApi";
 import { useSocket } from "../hooks/useSocket";
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const SocketContext = createContext();
+export const DisplayContext = createContext();
 
 // eslint-disable-next-line react/prop-types
-export const SocketProvider = ({ children }) => {
+export const DisplayProvider = ({ children }) => {
     const { register, location, getInitialLocationData, setTransaction } = useContext(LocationContext);
     const { languages, setLanguage, storeLanguage } = useContext(TranslationContext);
     const [ basket, setBasket ] = useState([]);
@@ -27,9 +27,9 @@ export const SocketProvider = ({ children }) => {
             setStatus("CHANGESTORE");
         },
         onMessage: (message) => {
-            if (message.status) {
-                setStatus(message.status);
-                setTransaction(message?.transactionNumber ?? 0)
+            if (message.register) {
+                setStatus(message.register.status);
+                setTransaction(message.register.lastTransactionNumber + 1)
             } else if (message.tender) {
                 setTender(message.tender ?? []);
                 if (message.tender.length === 0) {
@@ -69,7 +69,7 @@ export const SocketProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ location ]);
     return (
-        <SocketContext.Provider
+        <DisplayContext.Provider
             value={{
                 basket, setBasket,
                 tender, setTender,
@@ -79,6 +79,6 @@ export const SocketProvider = ({ children }) => {
             }}
         >
             { children }
-        </SocketContext.Provider>
+        </DisplayContext.Provider>
     );
 };
