@@ -25,6 +25,11 @@ export default defineConfig(({ command, mode }) => {
                     ws: true,
                     rewriteWsOrigin: true,
                 },
+                '/websocket-native': {
+                    target: 'ws://localhost:8084',
+                    ws: true,
+                    rewriteWsOrigin: true,
+                },
 
             },
         },

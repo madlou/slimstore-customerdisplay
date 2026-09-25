@@ -13,10 +13,11 @@ export const SocketProvider = ({ children }) => {
     const { languages, setLanguage, storeLanguage } = useContext(TranslationContext);
     const [ basket, setBasket ] = useState([]);
     const [ tender, setTender ] = useState([]);
+    const [ user, setUser ] = useState(null);
     const [ status, setStatus ] = useState('CONNECTING');
     const [ showThankyou, setShowThankyou ] = useState(false);
     const socket = useSocket({
-        url: '/websocket',
+        url: '/websocket-native',
         onConnect: () => {
             setStatus("CONNECTED");
             getInitialLocationData();
@@ -27,10 +28,14 @@ export const SocketProvider = ({ children }) => {
             setStatus("CHANGESTORE");
         },
         onMessage: (message) => {
-            if (message.status) {
-                setStatus(message.status);
-                setTransaction(message?.transactionNumber ?? 0)
-            } else if (message.tender) {
+            if (message.register) {
+                setStatus(message.register.status);
+                setTransaction((message.register.lastTxnNumber ?? -1) + 1)
+            }
+            if (message.user) {
+                setUser(message.user);
+            }
+            if (message.tender) {
                 setTender(message.tender ?? []);
                 if (message.tender.length === 0) {
                     setShowThankyou(true);
@@ -39,9 +44,9 @@ export const SocketProvider = ({ children }) => {
                         setLanguage(storeLanguage.current);
                     }, 5000);
                 }
-            } else {
+            }
+            if (message.basket) {
                 setBasket(message.basket ?? []);
-                setTender(message.tender ?? []);
             }
         },
     });
@@ -65,14 +70,16 @@ export const SocketProvider = ({ children }) => {
     useEffect(() => {
         if (location.store && location.register) {
             socket.connect(location);
+            return socket.disconnect;
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [ location ]);
+    }, [ location.store, location.register ]);
     return (
         <SocketContext.Provider
             value={{
                 basket, setBasket,
                 tender, setTender,
+                user, setUser,
                 status, setStatus,
                 showThankyou, setShowThankyou,
                 socket

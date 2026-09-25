@@ -1,32 +1,69 @@
 import { useRef } from 'react';
 import { Client } from '@stomp/stompjs';
 import { useLogger } from './useLogger';
-import SockJS from 'sockjs-client';
+import Cookies from 'universal-cookie';
 
 export function useSocket({ url, onConnect, onDisconnect, onMessage }) {
     const stompClient = useRef(null);
     const location = useRef(null);
     const connectedState = useRef(null);
+    const beforeUnloadHandler = useRef(null);
+    const closingClients = useRef(new WeakSet());
+    const cookies = new Cookies();
     if (typeof url !== 'string') {
         throw Error('Expected url to be a string. Received: ' + url);
     }
     const logger = useLogger({
         level: import.meta.env.VITE_LOG_TO_CONSOLE,
     })
+    const brokerUrl = () => {
+        const brokerUrl = new URL(url, window.location.href);
+        brokerUrl.protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        return brokerUrl.href;
+    };
+    const disconnect = () => {
+        connectedState.current = false;
+        const client = stompClient.current;
+        if (!client) {
+            return;
+        }
+        closingClients.current.add(client);
+        if (beforeUnloadHandler.current) {
+            window.removeEventListener('beforeunload', beforeUnloadHandler.current);
+            beforeUnloadHandler.current = null;
+        }
+        if (client.connected) {
+            client.publish({
+                destination: '/app/disconnect',
+                body: JSON.stringify(location.current),
+            });
+        }
+        setTimeout(() => {
+            client.deactivate();
+            if (stompClient.current === client) {
+                stompClient.current = null;
+            }
+        }, 100)
+    };
     return {
         connect: (locationObject) => {
             connectedState.current = true;
-            if (stompClient?.current?.connected == true) {
-                logger && logger.info('Socket', 'Already connnected!', true);
+            if (stompClient.current) {
+                logger && logger.info('Socket', 'Already connected or connecting!', true);
                 return false;
             }
             const client = new Client({
-                webSocketFactory: () => new SockJS(url),
+                brokerURL: brokerUrl(),
+                heartbeatIncoming: 0,
+                heartbeatOutgoing: 20000,
                 reconnectDelay: 5000,
                 debug: (message) => {
                     logger && logger.debug('Socket Debug', message);
                 },
                 onConnect: () => {
+                    const subscriptionHeaders = {
+                        token: cookies.get('token') ?? '',
+                    };
                     logger && logger.info('WebSocket Connect', locationObject, true);
                     client.subscribe('/topic/connected', (response) => {
                         logger && logger.debug('Register Connected', JSON.parse(response.body));
@@ -38,47 +75,49 @@ export function useSocket({ url, onConnect, onDisconnect, onMessage }) {
                         const message = JSON.parse(response.body);
                         logger && logger.info('/topic/' + locationObject.store + '/' + locationObject.register, message);
                         onMessage && onMessage(message);
-                    });
+                    }, subscriptionHeaders);
                     client.publish({
                         destination: '/app/connect',
                         body: JSON.stringify(locationObject),
                     });
-                    stompClient.current = client;
                     location.current = locationObject;
-                    window.removeEventListener('beforeunload', useSocket.disconnect);
-                    window.addEventListener('beforeunload', useSocket.disconnect);
+                    if (beforeUnloadHandler.current) {
+                        window.removeEventListener('beforeunload', beforeUnloadHandler.current);
+                    }
+                    beforeUnloadHandler.current = disconnect;
+                    window.addEventListener('beforeunload', beforeUnloadHandler.current);
                     onConnect && onConnect();
                 },
                 onStompError: (frame) => {
                     console.error('Broker reported error: ' + frame.headers['message']);
                     console.error('Additional details: ' + frame.body);
                 },
-                onWebSocketClose: () => {
+                onWebSocketClose: (event) => {
+                    const isCurrentClient = stompClient.current === client;
+                    const expectedClose = closingClients.current.has(client) || !isCurrentClient;
                     logger && logger.info('WebSocket Disconnected', location.current, true)
+                    if (expectedClose) {
+                        if (isCurrentClient) {
+                            stompClient.current = null;
+                            onDisconnect && onDisconnect();
+                        }
+                        return;
+                    }
                     if (connectedState.current) {
-                        console.error('Unexpected disconnect, trying to reconnect.')
-                        setTimeout(() => { window.location.reload() }, 5000);
+                        console.error('Unexpected disconnect, STOMP will try to reconnect.', {
+                            code: event?.code,
+                            reason: event?.reason,
+                            wasClean: event?.wasClean,
+                        })
+                        return;
                     }
                     onDisconnect && onDisconnect();
                 }
             });
+            stompClient.current = client;
             client.activate();
         },
-        disconnect: () => {
-            connectedState.current = false;
-            if (stompClient?.current?.connected) {
-                stompClient.current.publish({
-                    destination: '/app/disconnect',
-                    body: JSON.stringify(location.current),
-                });
-                setTimeout(() => {
-                    if(stompClient.current != null){
-                        stompClient.current.deactivate();
-                        stompClient.current = null;
-                    }
-                }, 100)
-            }
-        },
+        disconnect,
         isConnected: () => {
             return stompClient?.current?.connected;
         }
