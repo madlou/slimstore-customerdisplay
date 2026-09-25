@@ -17,22 +17,34 @@ export function useMoney(props) {
         formatMoney: (value) => {
             const sign = (value * 1) < 0 ? '-' : '';
             value = Math.abs(value);
+            var output = '';
             switch (countryCode) {
                 case 'DE':
-                    return sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    output = sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    break;
                 case 'ES':
-                    return sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    output = sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    break;
                 case 'FR':
-                    return sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    output = sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    break;
                 case 'IE':
-                    return sign + currencyMap[currencyCode] + value.toFixed(2);
+                    output = sign + currencyMap[currencyCode] + value.toFixed(2);
+                    break;
                 case 'PL':
-                    return sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    output = sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    break;
                 case 'UK':
-                    return sign + currencyMap[currencyCode] + value.toFixed(2);
+                    output = sign + currencyMap[currencyCode] + value.toFixed(2);
+                    break;
                 case 'US':
-                    return sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    output = sign + value.toFixed(2) + ' ' + currencyMap[currencyCode];
+                    break;
+                default:
+                    output = value.toFixed(2);
+                    break;
             }
+            return output;
         }
     }
 }
